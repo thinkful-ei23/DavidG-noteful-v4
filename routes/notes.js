@@ -26,11 +26,11 @@ router.get('/', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
   const {id} = req.params;
-  // if(!id){
-  //   const err = new Error('The Id doesnt exist');
-  //   err.status = 400;
-  //   return next(err);
-  // }
+  if(!mongoose.Types.ObjectId.isValid(id) ){
+    const err = new Error('The Id doesnt exist');
+    err.status = 400;
+    return next(err);
+  }
   return Note.findById(id)
     .then(results => {
       if(results){
@@ -72,7 +72,11 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-
+  if(!mongoose.Types.ObjectId.isValid(id) ){
+    const err = new Error('The Id doesnt exist');
+    err.status = 400;
+    return next(err);
+  }
   const updatedNote = {title, content};
   return Note.findByIdAndUpdate(id, updatedNote, {new: true}
   )
@@ -91,7 +95,11 @@ router.put('/:id', (req, res, next) => {
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
   const {id} = req.params;
-
+  if(!mongoose.Types.ObjectId.isValid(id) ){
+    const err = new Error('The Id doesnt exist');
+    err.status = 400;
+    return next(err);
+  }
   return Note.findByIdAndRemove(id)
     .then(() => {
       res.status(204).end();
@@ -99,5 +107,7 @@ router.delete('/:id', (req, res, next) => {
       next(err);
     });
 });
+
+
 
 module.exports = router;
