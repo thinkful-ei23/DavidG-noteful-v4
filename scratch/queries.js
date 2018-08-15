@@ -40,31 +40,31 @@ mongoose.connect(MONGODB_URI)
 //   })
 
 //Update by ID
-const updatedNote = {
-  title: 'Duke is my other dog',
-  content: 'He is a bulldog'
-};
+// const updatedNote = {
+//   title: 'Duke is my other dog',
+//   content: 'He is a bulldog'
+// };
 
-return Note.findByIdAndUpdate('5b732f1cb8f7dc3598243f6c', updatedNote, {new: true}
-)
-  .then(results => {
-    if(results){
-      console.log(results);
-    } else {
-      console.log('cant find that note');
-    }
-  })
+// return Note.findByIdAndUpdate('5b732f1cb8f7dc3598243f6c', updatedNote, {new: true}
+// )
+//   .then(results => {
+//     if(results){
+//       console.log(results);
+//     } else {
+//       console.log('cant find that note');
+//     }
+//   })
 
 //Remove by ID
-// return Note.findByIdAndRemove('5b732f1cb8f7dc3598243f6c')
-//   .then(results => {
-//     console.log('removed', results);
-//   })
-  
-  .then(() => {
-    return mongoose.disconnect();
+return Note.findByIdAndRemove('5b732f1cb8f7dc3598243f6c')
+  .then(results => {
+    console.log('removed', results);
   })
-  .catch(err => {
-    console.error(`ERROR: ${err.message}`);
-    console.error(err);
-  });
+  
+//   .then(() => {
+//     return mongoose.disconnect();
+//   })
+//   .catch(err => {
+//     console.error(`ERROR: ${err.message}`);
+//     console.error(err);
+//   });
