@@ -104,7 +104,6 @@ describe('Noteful API - Folders', function () {
     });
 
     it('should respond with a 404 for an ID that does not exist', function () {
-      // The string "DOESNOTEXIST" is 12 bytes which is a valid Mongo ObjectId
       return chai.request(app)
         .get('/api/folders/DOESNOTEXIST')
         .then(res => {
@@ -171,7 +170,7 @@ describe('Noteful API - Folders', function () {
   describe('PUT /api/folders/:id', function () {
 
     it('should update the folder', function () {
-      const updateItem = { 'name': 'Updated Name' };
+      const updateItem = { 'name': 'Update' };
       let data;
       return Folder.findOne()
         .then(_data => {
@@ -193,7 +192,7 @@ describe('Noteful API - Folders', function () {
 
 
     it('should respond with a 400 for an invalid id', function () {
-      const updateItem = { 'name': 'Blah' };
+      const updateItem = { 'name': 'Something' };
       return chai.request(app)
         .put('/api/folders/NOT-A-VALID-ID')
         .send(updateItem)
@@ -204,8 +203,7 @@ describe('Noteful API - Folders', function () {
     });
 
     it('should respond with a 404 for an id that does not exist', function () {
-      const updateItem = { 'name': 'Blah' };
-      // The string "DOESNOTEXIST" is 12 bytes which is a valid Mongo ObjectId
+      const updateItem = { 'name': 'Something' };
       return chai.request(app)
         .put('/api/folders/DOESNOTEXIST')
         .send(updateItem)

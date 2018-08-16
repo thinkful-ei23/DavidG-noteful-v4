@@ -9,18 +9,17 @@ const { PORT, MONGODB_URI } = require('./config');
 const notesRouter = require('./routes/notes');
 const foldersRouter = require('./routes/folders');
 
-// Create an Express application
+
 const app = express();
 
-// Log all requests. Skip logging during
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'common', {
   skip: () => process.env.NODE_ENV === 'test'
 }));
 
-// Create a static webserver
+
 app.use(express.static('public'));
 
-// Parse request body
+
 app.use(express.json());
 
 // Mount routers
