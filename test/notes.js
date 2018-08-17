@@ -75,10 +75,8 @@ describe('Noteful API - Notes', function () {
 
     it('should return correct search results for a searchTerm query', function () {
       const searchTerm = 'gaga';
-      // const re = new RegExp(searchTerm, 'i');
       const dbPromise = Note.find({
         title: { $regex: searchTerm, $options: 'i' }
-        // $or: [{ 'title': re }, { 'content': re }]
       });
       const apiPromise = chai.request(app)
         .get(`/api/notes?searchTerm=${searchTerm}`);
@@ -111,23 +109,6 @@ describe('Noteful API - Notes', function () {
             chai.request(app).get(`/api/notes?folderId=${data.id}`)
           ]);
         })
-        .then(([data, res]) => {
-          expect(res).to.have.status(200);
-          expect(res).to.be.json;
-          expect(res.body).to.be.a('array');
-          expect(res.body).to.have.length(data.length);
-        });
-    });
-
-    it('should return an empty array for an incorrect query', function () {
-      const searchTerm = 'NotValid';
-      // const re = new RegExp(searchTerm, 'i');
-      const dbPromise = Note.find({
-        title: { $regex: searchTerm, $options: 'i' }
-        // $or: [{ 'title': re }, { 'content': re }]
-      });
-      const apiPromise = chai.request(app).get(`/api/notes?searchTerm=${searchTerm}`);
-      return Promise.all([dbPromise, apiPromise])
         .then(([data, res]) => {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
@@ -256,38 +237,9 @@ describe('Noteful API - Notes', function () {
         });
     });
 
-
-    it('should respond with status 400 and an error message when `id` is not valid', function () {
-      const updateItem = {
-        'title': 'What about dogs?!',
-        'content': 'woof woof'
-      };
-      return chai.request(app)
-        .put('/api/notes/NOT-A-VALID-ID')
-        .send(updateItem)
-        .then(res => {
-          expect(res).to.have.status(400);
-          expect(res.body.message).to.eq('The `id` is not valid');
-        });
-    });
-
-    it('should respond with a 404 for an id that does not exist', function () {
-      // The string "DOESNOTEXIST" is 12 bytes which is a valid Mongo ObjectId
-      const updateItem = {
-        'title': 'What about dogs?!',
-        'content': 'woof woof'
-      };
-      return chai.request(app)
-        .put('/api/notes/DOESNOTEXIST')
-        .send(updateItem)
-        .then(res => {
-          expect(res).to.have.status(404);
-        });
-    });
-
     it('should return an error when missing "title" field', function () {
       const updateItem = {
-        'content': 'woof woof'
+        'content': 'test test'
       };
       let data;
       return Note.findOne()
