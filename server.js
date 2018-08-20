@@ -3,28 +3,40 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const passport = require('passport');
+const localStrategy = require('./passport/local');
 
 const { PORT, MONGODB_URI } = require('./config');
 
 const notesRouter = require('./routes/notes');
 const foldersRouter = require('./routes/folders');
+const tagsRouter = require('./routes/tags');
+const usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
 
 
+// Create an Express application
 const app = express();
+passport.use(localStrategy);
 
+// Log all requests. Skip logging during
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'common', {
   skip: () => process.env.NODE_ENV === 'test'
 }));
 
-
+// Create a static webserver
 app.use(express.static('public'));
 
-
+// Parse request body
 app.use(express.json());
 
 // Mount routers
 app.use('/api/notes', notesRouter);
 app.use('/api/folders', foldersRouter);
+app.use('/api/tags', tagsRouter);
+
+app.use('/api/users', usersRouter);
+app.use('/api', authRouter);
 
 // Custom 404 Not Found route handler
 app.use((req, res, next) => {
@@ -39,7 +51,6 @@ app.use((err, req, res, next) => {
     const errBody = Object.assign({}, err, { message: err.message });
     res.status(err.status).json(errBody);
   } else {
-    console.error(err);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
