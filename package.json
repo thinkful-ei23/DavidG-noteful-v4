@@ -9,15 +9,18 @@
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js",
-		"test": "cross-env NODE_ENV=test mocha --file test/server.js --timeout 5000",
+		"test": "cross-env NODE_ENV=test mocha --file test/server.js --timeout 9000",
 		"cover": "nyc --reporter=lcov --reporter=text-summary npm test"
 	},
 	"dependencies": {
 		"bcryptjs": "^2.4.3",
+		"dotenv": "^6.0.0",
 		"express": "^4.16.3",
+		"jsonwebtoken": "^8.3.0",
 		"mongoose": "^5.2.8",
 		"morgan": "^1.9.0",
 		"passport": "^0.4.0",
+		"passport-jwt": "^4.0.0",
 		"passport-local": "^1.0.0"
 	},
 	"devDependencies": {

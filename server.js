@@ -4,9 +4,10 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const localStrategy = require('./passport/local');
 
 const { PORT, MONGODB_URI } = require('./config');
+const localStrategy = require('./passport/local');
+const jwtStrategy = require('./passport/jwt');
 
 const notesRouter = require('./routes/notes');
 const foldersRouter = require('./routes/folders');
@@ -14,10 +15,8 @@ const tagsRouter = require('./routes/tags');
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
 
-
 // Create an Express application
 const app = express();
-passport.use(localStrategy);
 
 // Log all requests. Skip logging during
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'common', {
@@ -29,6 +28,10 @@ app.use(express.static('public'));
 
 // Parse request body
 app.use(express.json());
+
+// Utilize the given `strategy`
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 // Mount routers
 app.use('/api/notes', notesRouter);
